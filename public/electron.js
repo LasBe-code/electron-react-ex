@@ -11,9 +11,9 @@ function createWindow() {
     width: 1200,
     height: 800,
     webPreferences: {
-      nodeIntegration: true,
       enableRemoteModule: true,
       devTools: true,
+      nodeIntegration: true,
       contextIsolation: false, // TypeError: window.require is not a function
     },
   });
@@ -24,44 +24,27 @@ function createWindow() {
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
-  if (isDev) {
-    mainWindow.webContents.openDevTools({ mode: "detach" });
-  }
+  if (isDev) mainWindow.webContents.openDevTools({ mode: "detach" });
 
   mainWindow.setResizable(true);
   mainWindow.on("closed", () => {
-    globalShortcut.unregisterAll();
     mainWindow = null;
     app.quit();
   });
   mainWindow.focus();
 }
 
-app.on("ready", () => {
-  createWindow();
-  globalShortcut.register("Alt+CommandOrControl+I", () => {});
-  globalShortcut.register("Shift+Alt+CommandOrControl+f12", () => {
-    mainWindow.webContents.toggleDevTools();
-  });
-});
+app.on("ready", createWindow);
 
 app.on("activate", () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
+  if (mainWindow === null) createWindow();
 });
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    globalShortcut.unregisterAll();
-    app.quit();
-  }
+  if (process.platform !== "darwin") app.quit();
 });
 
-app.on("will-quit", () => {
-  globalShortcut.unregisterAll();
-});
-
-ipcMain.on("event", (_, arg) => {
-  console.log(arg);
+ipcMain.on("channel", (event, data) => {
+  console.log(":: From Renderer Process ::", data);
+  event.sender.send("channel", "From Main Process");
 });

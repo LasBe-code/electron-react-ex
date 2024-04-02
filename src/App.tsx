@@ -1,13 +1,10 @@
 import React from "react";
+import { Ipc } from "./1_IPC/Ipc";
 
 function App() {
-  const handleClick = () => {
-    const { ipcRenderer } = window.require("electron");
-    ipcRenderer.send("event", "HIHIHIHI");
-  };
   return (
     <div className="App">
-      <button onClick={handleClick}>Click me</button>
+      <Ipc />
     </div>
   );
 }
