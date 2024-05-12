@@ -1,11 +1,10 @@
-const { app, BrowserWindow, globalShortcut, ipcMain } = await import(
-  "electron"
-);
+const { app, BrowserWindow, ipcMain } = await import("electron");
 const path = await import("path");
 const isDev = await import("electron-is-dev");
 
 let mainWindow;
 
+const __dirname = path.resolve();
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
@@ -14,7 +13,8 @@ function createWindow() {
       enableRemoteModule: true,
       devTools: true,
       nodeIntegration: true,
-      contextIsolation: false, // TypeError: window.require is not a function
+      // contextIsolation: false, // TypeError: window.require is not a function
+      preload: path.join(__dirname, "public/preload.mjs"),
     },
   });
 

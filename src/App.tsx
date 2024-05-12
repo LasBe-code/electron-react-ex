@@ -1,10 +1,10 @@
-import React from "react";
-import { Ipc } from "./1_IPC/Ipc";
+import { Preload } from "./2_PRELOAD/Preload";
 
 function App() {
   return (
     <div className="App">
-      <Ipc />
+      {/* <Ipc /> */}
+      <Preload />
     </div>
   );
 }
